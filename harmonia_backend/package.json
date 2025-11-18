@@ -1,0 +1,31 @@
+{
+  "name": "harmonia-backend",
+  "version": "1.0.0",
+  "description": "Backend para app de manejo de estrés y salud mental",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:user\" \"npm run start:mood\" \"npm run start:daily\" \"npm run start:exercises\"",
+    "start:user": "node user-service/index.js",
+    "start:mood": "node mood-service/index.js",
+    "start:daily": "node daily-records-service/index.js",
+    "start:exercises": "node exercises-service/index.js",
+    "dev": "concurrently \"npm run dev:user\" \"npm run dev:mood\" \"npm run dev:daily\" \"npm run dev:exercises\"",
+    "dev:user": "nodemon user-service/index.js",
+    "dev:mood": "nodemon mood-service/index.js",
+    "dev:daily": "nodemon daily-records-service/index.js",
+    "dev:exercises": "nodemon exercises-service/index.js",
+    "install:deps": "npm install"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^8.0.3",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.1",
+    "axios": "^1.6.0",
+    "node-cron": "^3.0.3"
+  }
+}
