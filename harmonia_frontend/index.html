@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harmonía - Manejo de Estrés</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Pantalla de Bienvenida -->
+        <div id="welcome-screen" class="screen active">
+            <div class="header">
+                <h1>Harmonía</h1>
+                <p>Tu compañero para el bienestar mental</p>
+            </div>
+            
+            <div class="card">
+                <p class="welcome-text">
+                    Gestiona tu estrés, mejora tu estado de ánimo y desarrolla hábitos saludables con seguimiento automático
+                </p>
+                
+                <div class="welcome-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                
+                <button class="btn btn-primary" onclick="showScreen('register-screen')">
+                    Comenzar Ahora
+                </button>
+                
+                <p class="auth-link">
+                    ¿Ya tienes cuenta? <a href="#" onclick="showScreen('login-screen')">Iniciar sesión</a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Registro -->
+        <div id="register-screen" class="screen">
+            <div class="header">
+                <h1>Crear Cuenta</h1>
+                <p>Comienza tu viaje hacia el bienestar</p>
+            </div>
+            
+            <div class="card">
+                <input type="text" id="register-name" class="text-input" placeholder="Nombre completo" required>
+                <input type="email" id="register-email" class="text-input" placeholder="Correo electrónico" required>
+                <input type="password" id="register-password" class="text-input" placeholder="Contraseña" required>
+                <input type="text" id="register-country" class="text-input" placeholder="País" required>
+                
+                <button class="btn btn-primary" onclick="register()">
+                    <i class="fas fa-user-plus"></i> Crear Cuenta
+                </button>
+                
+                <p class="auth-link">
+                    ¿Ya tienes una cuenta? <a href="#" onclick="showScreen('login-screen')">Iniciar sesión</a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Pantalla de Login -->
+        <div id="login-screen" class="screen">
+            <div class="header">
+                <h1>Iniciar Sesión</h1>
+                <p>Bienvenido de vuelta</p>
+            </div>
+            
+            <div class="card">
+                <input type="email" id="login-email" class="text-input" placeholder="Correo electrónico" required>
+                <input type="password" id="login-password" class="text-input" placeholder="Contraseña" required>
+                
+                <button class="btn btn-primary" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                </button>
+                
+                <p class="auth-link">
+                    ¿No tienes cuenta? <a href="#" onclick="showScreen('register-screen')">Crear cuenta</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Pantalla del Dashboard (SOLO PARA USUARIOS NORMALES) -->
+        <div id="dashboard-screen" class="screen">
+            <div class="header">
+                <h1>Mi Dashboard</h1>
+                <p id="dashboard-welcome">Bienvenido</p>
+            </div>
+
+            <div class="card">
+                <div id="alert-container"></div>
+
+                <!-- Tarjeta de estado de estrés visual -->
+                <div class="stress-card" id="stress-card">
+                    <div class="stress-level">
+                        <div class="stress-icon" id="stress-icon">📊</div>
+                        <div class="stress-info">
+                            <div class="stress-title">Tu nivel de estrés hoy</div>
+                            <div class="stress-value" id="stress-value">--</div>
+                            <div class="stress-label" id="stress-label">Generando predicción...</div>
+                            <div id="stress-factors" class="stress-factors"></div>
+                        </div>
+                    </div>
+                    <div class="stress-bar">
+                        <div class="stress-fill" id="stress-fill"></div>
+                    </div>
+                </div>
+
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <i class="fas fa-bed stat-icon"></i>
+                        <div id="sleep-hours" class="stat-value">--h</div>
+                        <div class="stat-label">Sueño</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-walking stat-icon"></i>
+                        <div id="steps-count" class="stat-value">--</div>
+                        <div class="stat-label">Pasos</div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart stat-icon"></i>
+                        <div id="exercise-count" class="stat-value">--</div>
+                        <div class="stat-label">Ejercicios</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="generatePrediction()">
+                        <i class="fas fa-brain"></i> Actualizar Predicción
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="syncGoogleFitData()">
+                        <i class="fas fa-sync"></i> Sincronizar Datos
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sección de Recomendaciones Personalizadas -->
+            <div class="card">
+                <h3 class="section-title">
+                    <i class="fas fa-lightbulb"></i> Recomendaciones para Ti
+                </h3>
+                <div id="recommendations-container" class="recommendations-container">
+                    <div class="empty-state">
+                        <i class="fas fa-lightbulb"></i>
+                        <p>No hay recomendaciones activas</p>
+                        <small>Completa un check-in para obtener recomendaciones personalizadas</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Ejercicios Completa -->
+        <div id="exercises-screen" class="screen">
+            <div class="header">
+                <h1>Ejercicios</h1>
+                <p>Practica ejercicios para tu bienestar</p>
+            </div>
+            
+            <div class="card">
+                <div class="search-section">
+                    <input type="text" id="exercise-search" class="text-input" placeholder="Buscar ejercicios..." onkeyup="filterExercises()">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" onclick="filterByCategory('all')">Todos</button>
+                        <button class="filter-btn" onclick="filterByCategory('breathing')">Respiración</button>
+                        <button class="filter-btn" onclick="filterByCategory('mindfulness')">Mindfulness</button>
+                        <button class="filter-btn" onclick="filterByCategory('meditation')">Meditación</button>
+                        <button class="filter-btn" onclick="filterByCategory('sound')">Sonido</button>
+                        <button class="filter-btn" onclick="filterByCategory('movement')">Movimiento</button>
+                    </div>
+                </div>
+                
+                <div id="all-exercises-container" class="exercises-grid">
+                    <div class="loading-state">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando ejercicios...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Check-in de Estado de Ánimo -->
+        <div id="mood-screen" class="screen">
+            <div class="header">
+                <h1>Check-in Diario</h1>
+                <p>Registra cómo te sientes hoy</p>
+            </div>
+            
+            <div class="card">
+                <div class="mood-instructions">
+                    <p>Selecciona cómo te sientes en este momento:</p>
+                </div>
+                
+                <div class="mood-slider">
+                    <div class="mood-option" onclick="selectMood(this, 20)">
+                        <div class="mood-icon">
+                            <i class="fas fa-frown"></i>
+                        </div>
+                        <div class="mood-label">Muy mal</div>
+                    </div>
+                    <div class="mood-option" onclick="selectMood(this, 40)">
+                        <div class="mood-icon">
+                            <i class="fas fa-meh"></i>
+                        </div>
+                        <div class="mood-label">Mal</div>
+                    </div>
+                    <div class="mood-option" onclick="selectMood(this, 60)">
+                        <div class="mood-icon">
+                            <i class="fas fa-meh-blank"></i>
+                        </div>
+                        <div class="mood-label">Regular</div>
+                    </div>
+                    <div class="mood-option" onclick="selectMood(this, 80)">
+                        <div class="mood-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="mood-label">Bien</div>
+                    </div>
+                    <div class="mood-option" onclick="selectMood(this, 100)">
+                        <div class="mood-icon">
+                            <i class="fas fa-laugh"></i>
+                        </div>
+                        <div class="mood-label">Excelente</div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-edit"></i> Añade una nota (opcional)
+                    </h3>
+                    <textarea id="mood-note" class="text-input" placeholder="¿Qué ha influido en tu estado de ánimo hoy? Máximo 140 caracteres..." rows="3" maxlength="140"></textarea>
+                    <div id="char-count" class="char-count">0/140 caracteres</div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-tags"></i> Etiquetas
+                    </h3>
+                    <div class="tag-container">
+                        <div class="tag" onclick="toggleTag(this, 'trabajo')">
+                            <i class="fas fa-briefcase"></i> Trabajo
+                        </div>
+                        <div class="tag" onclick="toggleTag(this, 'familia')">
+                            <i class="fas fa-home"></i> Familia
+                        </div>
+                        <div class="tag" onclick="toggleTag(this, 'sueño')">
+                            <i class="fas fa-bed"></i> Sueño
+                        </div>
+                        <div class="tag" onclick="toggleTag(this, 'ejercicio')">
+                            <i class="fas fa-running"></i> Ejercicio
+                        </div>
+                        <div class="tag" onclick="toggleTag(this, 'comida')">
+                            <i class="fas fa-utensils"></i> Comida
+                        </div>
+                        <div class="tag" onclick="toggleTag(this, 'social')">
+                            <i class="fas fa-users"></i> Social
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="submitMood()">
+                        <i class="fas fa-check-circle"></i> Guardar Check-in
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="showScreen('dashboard-screen')">
+                        <i class="fas fa-arrow-left"></i> Volver al Inicio
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Detalle de Ejercicio -->
+        <div id="exercise-detail-screen" class="screen">
+            <div class="header">
+                <h1 id="exercise-title">Ejercicio</h1>
+                <p id="exercise-category">Cargando información...</p>
+            </div>
+            
+            <div class="card">
+                <div id="exercise-video-container">
+                    <!-- Video de YouTube se cargará aquí -->
+                </div>
+                
+                <div class="exercise-info-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-list-ol"></i> Instrucciones
+                    </h3>
+                    <div id="exercise-steps" class="exercise-steps">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Cargando instrucciones...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startExercise()">
+                        <i class="fas fa-play"></i> Comenzar Ejercicio
+                    </button>
+                    
+                    <button class="btn btn-outline" onclick="goBackToExercises()">
+                        <i class="fas fa-arrow-left"></i> Volver a Ejercicios
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Resumen Semanal -->
+        <div id="weekly-screen" class="screen">
+            <div class="header">
+                <h1>Resumen Semanal</h1>
+                <p id="weekly-dates">Cargando datos de la semana...</p>
+            </div>
+            
+            <div class="card">
+                <div class="tab-container">
+                    <div class="tab active" onclick="changeWeeklyTab('wellbeing')">
+                        <i class="fas fa-heartbeat"></i> Bienestar
+                    </div>
+                    <div class="tab" onclick="changeWeeklyTab('exercises')">
+                        <i class="fas fa-running"></i> Ejercicios
+                    </div>
+                    <div class="tab" onclick="changeWeeklyTab('sleep')">
+                        <i class="fas fa-bed"></i> Sueño
+                    </div>
+                </div>
+                
+                <div class="chart-section">
+                    <h3 class="section-title">Tu Progreso Semanal</h3>
+                    <div id="weekly-chart" class="weekly-chart">
+                        <div class="empty-state">
+                            <i class="fas fa-chart-bar"></i>
+                            <p>No hay datos para mostrar esta semana</p>
+                            <small>Completa algunos check-ins para ver tu progreso</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="recommendations-section">
+                    <h3 class="section-title">
+                        <i class="fas fa-lightbulb"></i> Recomendaciones Personalizadas
+                    </h3>
+                    <div id="weekly-recommendations-container" class="recommendations-container"></div>
+                        <div class="empty-state">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Completa al menos un check-in para obtener recomendaciones personalizadas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Perfil -->
+        <div id="profile-screen" class="screen">
+            <div class="header">
+                <h1>Mi Perfil</h1>
+                <p>Gestiona tu cuenta y preferencias</p>
+            </div>
+            
+            <div class="card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <span id="profile-initial">U</span>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profile-name" class="profile-name">Usuario</h2>
+                        <p id="profile-email" class="profile-email">usuario@ejemplo.com</p>
+                        <div class="profile-badge" id="profile-role-badge">
+                            <i class="fas fa-user"></i>
+                            <span>Usuario</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <div class="stat-number" id="profile-days-active">0</div>
+                        <div class="stat-label">Días activo</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="stat-number" id="profile-checkins">0</div>
+                        <div class="stat-label">Check-ins</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="stat-number" id="profile-exercises">0</div>
+                        <div class="stat-label">Ejercicios</div>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="btn btn-outline" onclick="syncGoogleFitData()">
+                        <i class="fas fa-sync"></i> Sincronizar Datos
+                    </button>
+                    
+                    <!-- Botón para que admin pueda ver dashboard de usuario -->
+                    <button class="btn btn-outline admin-only" onclick="showUserDashboard()" style="display: none;">
+                        <i class="fas fa-eye"></i> Ver Dashboard Usuario
+                    </button>
+                    
+                    <button class="btn btn-outline logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Administración (SOLO PARA ADMINS) -->
+        <div id="admin-screen" class="screen">
+            <div class="header">
+                <h1>Panel de Administración</h1>
+                <p>Gestión de ejercicios y contenido</p>
+            </div>
+            
+            <div class="card">
+                <div class="admin-actions-header">
+                    <button class="btn btn-primary" onclick="showCreateExerciseForm()">
+                        <i class="fas fa-plus"></i> Nuevo Ejercicio
+                    </button>
+                    <button class="btn btn-outline" onclick="showUserDashboard()">
+                        <i class="fas fa-user"></i> Ver como Usuario
+                    </button>
+                    <button class="btn btn-outline" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </button>
+                </div>
+                
+                <div class="admin-section">
+                    <h3 class="section-title">Gestión de Ejercicios</h3>
+                    <div id="admin-exercises-container" class="admin-exercises-list">
+                        <div class="loading-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Cargando ejercicios...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de creación de ejercicio -->
+        <div id="create-exercise-screen" class="screen">
+            <div class="header">
+                <h1>Crear Nuevo Ejercicio</h1>
+                <p>Completa la información del ejercicio</p>
+            </div>
+            
+            <div class="card">
+                <input type="text" id="exercise-title-input" class="text-input" placeholder="Título del ejercicio" required>
+                <select id="exercise-category-select" class="text-input" required>
+                    <option value="">Selecciona categoría</option>
+                    <option value="breathing">Respiración</option>
+                    <option value="meditation">Meditación</option>
+                    <option value="mindfulness">Mindfulness</option>
+                    <option value="sound">Sonido</option>
+                    <option value="movement">Movimiento</option>
+                </select>
+                <input type="number" id="exercise-duration" class="text-input" placeholder="Duración en minutos" min="1" required>
+                <input type="text" id="exercise-tags" class="text-input" placeholder="Etiquetas (separadas por comas)">
+                <input type="text" id="exercise-youtube-id" class="text-input" placeholder="ID de YouTube (opcional)">
+                <textarea id="exercise-steps-textarea" class="text-input" placeholder="Pasos del ejercicio (uno por línea)" rows="6" required></textarea>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="createExercise()">
+                        <i class="fas fa-save"></i> Guardar Ejercicio
+                    </button>
+                    <button class="btn btn-outline" onclick="showAdminPanel()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación inferior (OCULTA PARA ADMINS) -->
+        <div class="nav-bottom" id="main-navigation" style="display: none;">
+            <div class="nav-item" onclick="showScreen('dashboard-screen')">
+                <div class="nav-icon"><i class="fas fa-home"></i></div>
+                <div class="nav-label">Inicio</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('exercises-screen'); loadAllExercises();">
+                <div class="nav-icon"><i class="fas fa-running"></i></div>
+                <div class="nav-label">Ejercicios</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('weekly-screen')">
+                <div class="nav-icon"><i class="fas fa-chart-line"></i></div>
+                <div class="nav-label">Resumen</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('mood-screen')">
+                <div class="nav-icon"><i class="fas fa-clipboard-check"></i></div>
+                <div class="nav-label">Check-in</div>
+            </div>
+            <div class="nav-item" onclick="showScreen('profile-screen')">
+                <div class="nav-icon"><i class="fas fa-user"></i></div>
+                <div class="nav-label">Perfil</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
