@@ -90,7 +90,7 @@ function getServiceHeaders() {
 }
 
 // =============================================================================
-// FUNCIONES DE ADMINISTRACIÓN - ADMIN SOLO VE PANEL ADMIN
+// FUNCIONES DE ADMINISTRACIÓN 
 // =============================================================================
 
 // Verificar si el usuario es admin
@@ -268,7 +268,7 @@ async function createExercise() {
     }
 }
 
-// Editar ejercicio (placeholder - implementar según necesidades)
+// Editar ejercicio
 function editExercise(exerciseId) {
     showAlert('Funcionalidad de edición en desarrollo', 'info');
     // Implementar lógica de edición aquí
@@ -419,11 +419,11 @@ function logout() {
 }
 
 // =============================================================================
-// INTEGRACIÓN GOOGLE FIT - CORREGIDA
+// INTEGRACIÓN GOOGLE FIT 
 // =============================================================================
 
 
-// Conectar Google Fit en modo simulación - MEJORADA
+// Conectar Google Fit en modo simulación 
 async function connectGoogleFitSimulation() {
   try {
     
@@ -447,7 +447,7 @@ async function connectGoogleFitSimulation() {
 }
 
 
-// Sincronizar datos de Google Fit - COMPLETAMENTE CORREGIDA
+// Sincronizar datos de Google Fit 
 async function syncGoogleFitData() {
   try {
     console.log('Starting Google Fit sync from frontend...');
@@ -465,7 +465,7 @@ async function syncGoogleFitData() {
       const data = await response.json();
       console.log('Google Fit sync successful:', data);
       
-      // ACTUALIZACIÓN INMEDIATA: Forzar actualización de datos en el dashboard
+      // Forzar actualización de datos en el dashboard
       await loadWellbeingData();
       await loadStressPrediction();
       
@@ -482,13 +482,13 @@ async function syncGoogleFitData() {
   } catch (error) {
     console.error('Error syncing Google Fit data:', error);
     
-    // MEJORADO: Intentar usar datos simulados como fallback
+    // Usar datos simulados como fallback
     await simulateWellbeingData();
   }
 }
 
 
-// Datos simulados como fallback - COMPLETAMENTE CORREGIDA
+// Datos simulados como fallback 
 async function simulateWellbeingData() {
   console.log('Using simulated wellbeing data as fallback');
   
@@ -605,7 +605,7 @@ function updateProfileUI() {
     }
 }
 
-// Cargar datos del perfil - CORREGIDA
+// Cargar datos del perfil
 async function loadProfileData() {
     if (!currentUser) return;
     
@@ -652,7 +652,7 @@ async function loadProfileData() {
 }
 
 // =============================================================================
-// DASHBOARD PRINCIPAL - NUEVO SISTEMA DE PREDICCIÓN DE ESTRÉS
+// DASHBOARD PRINCIPAL - SISTEMA DE PREDICCIÓN DE ESTRÉS
 // =============================================================================
 
 // Cargar datos del dashboard
@@ -674,7 +674,7 @@ async function loadDashboardData() {
 }
 
 
-// Cargar datos de bienestar - COMPLETAMENTE CORREGIDA
+// Cargar datos de bienestar 
 async function loadWellbeingData() {
   if (!currentUser) return;
   
@@ -710,7 +710,7 @@ async function loadWellbeingData() {
 }
 
 
-// Actualizar la interfaz con datos reales - MEJORADA
+// Actualizar la interfaz con datos reales
 function updateWellbeingUI(wellbeingData) {
   const sleepHoursElement = document.getElementById('sleep-hours');
   const stepsCountElement = document.getElementById('steps-count');
@@ -766,7 +766,7 @@ async function loadExerciseCount() {
 }
 
 // =============================================================================
-// NUEVO SISTEMA DE PREDICCIÓN DE ESTRÉS CON IA
+// SISTEMA DE PREDICCIÓN DE ESTRÉS CON IA
 // =============================================================================
 
 // Cargar predicción de estrés actual
@@ -1051,7 +1051,7 @@ async function startRecommendedExercise(recommendationId) {
 }
 
 // =============================================================================
-// CHECK-IN DE ÁNIMO - INTEGRADO CON NUEVO SISTEMA
+// CHECK-IN DE ÁNIMO 
 // =============================================================================
 
 // Seleccionar estado de ánimo
@@ -1076,7 +1076,7 @@ function toggleTag(element, tag) {
     }
 }
 
-// Enviar check-in de ánimo - AHORA GENERA PREDICCIÓN AUTOMÁTICA
+// Enviar check-in de ánimo - genera prediccion automatica 
 async function submitMood() {
     if (!selectedMoodScore) {
         showAlert('Por favor selecciona cómo te sientes', 'error');
@@ -1164,7 +1164,7 @@ function resetMoodForm() {
 }
 
 // =============================================================================
-// EJERCICIOS - CORREGIDOS (CLICK Y FILTROS FUNCIONANDO)
+// EJERCICIOS 
 // =============================================================================
 
 // Cargar todos los ejercicios para la página dedicada
@@ -1239,7 +1239,7 @@ function filterExercises() {
     });
 }
 
-// Filtrar por categoría - CORREGIDO (usa inglés como en la BD)
+// Filtrar por categoría 
 function filterByCategory(category) {
     // Actualizar botones activos
     document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -1279,7 +1279,7 @@ function getCategoryName(category) {
     }
 }
 
-// Mostrar detalle de ejercicio - CORREGIDO (ahora funciona el click)
+// Mostrar detalle de ejercicio 
 function showExerciseDetail(exercise) {
     // Si exercise es string, parsearlo
     if (typeof exercise === 'string') {
@@ -1419,11 +1419,11 @@ function startExercise() {
 }
 
 // =============================================================================
-// RESUMEN SEMANAL - ACTUALIZADO CON NUEVO SISTEMA
+// RESUMEN SEMANAL 
 // =============================================================================
 
 
-// Cargar resumen semanal - COMPLETAMENTE CORREGIDO
+// Cargar resumen semanal 
 async function loadWeeklySummary() {
     if (!currentUser) return;
     
@@ -1454,7 +1454,7 @@ async function loadWeeklySummary() {
     }
 }
 
-// Crear resumen semanal manual como fallback - MEJORADO
+// Crear resumen semanal manual como fallback
 async function createManualWeeklySummary() {
     try {
         console.log('Creando resumen semanal manual...');
@@ -1501,7 +1501,7 @@ async function createManualWeeklySummary() {
     }
 }
 
-// Calcular resumen semanal manual - ACTUALIZADO
+// Calcular resumen semanal manual
 function calculateManualWeeklySummary(wellbeingData, sessionsData, stressData, moodData) {
     const summary = {
         total_days: 7,
@@ -1544,7 +1544,7 @@ function calculateManualWeeklySummary(wellbeingData, sessionsData, stressData, m
     return summary;
 }
 
-// Actualizar vista semanal - COMPLETAMENTE CORREGIDA
+// Actualizar vista semanal
 function updateWeeklyView(data) {
     const datesElement = document.getElementById('weekly-dates');
     const chartContainer = document.getElementById('weekly-chart');
@@ -1613,7 +1613,7 @@ function showEmptyWeeklyView() {
     }
 }
 
-// Crear gráfico semanal - VERSIÓN MEJORADA Y RESPONSIVE
+// Crear gráfico semanal 
 function createWeeklyChart(container, summary) {
     container.innerHTML = '';
     
@@ -1748,7 +1748,7 @@ function getTrendColor(trend) {
     }
 }
 
-// Generar recomendaciones semanales - MEJORADO
+// Generar recomendaciones semanales
 function generateWeeklyRecommendations(container, summary) {
     container.innerHTML = '';
     
@@ -1890,7 +1890,7 @@ function changeWeeklyTab(tabName) {
     // Activar la pestaña clickeada
     event.target.classList.add('active');
     
-    // En una implementación real, aquí cargarías datos diferentes según la pestaña
+    // Aquí se cargarian datos diferentes según la pestaña
     // Por ahora recargamos el mismo resumen
     loadWeeklySummary();
 }

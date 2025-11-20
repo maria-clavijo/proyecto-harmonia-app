@@ -1,4 +1,3 @@
-// verify-generated-data.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 

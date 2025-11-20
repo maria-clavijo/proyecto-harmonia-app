@@ -31,11 +31,11 @@ if (USE_GOOGLE_FIT_SIMULATION) {
 }
 
 // =============================================================================
-// MIDDLEWARES - CORREGIDO
+// MIDDLEWARES 
 // =============================================================================
 
 /**
- * JWT Authentication Middleware - CORREGIDO
+ * JWT Authentication Middleware 
  */
 const auth = async (req, res, next) => {
   try {
@@ -156,7 +156,7 @@ async function getSleepData(accessToken, date) {
 async function getStepsData(accessToken, date) {
   // Modo simulación
   if (USE_GOOGLE_FIT_SIMULATION || accessToken === 'simulated_token') {
-    console.log('🔧 Using simulated steps data');
+    console.log('Using simulated steps data');
     return generateSimulatedStepsData();
   }
 
@@ -211,7 +211,7 @@ async function getStepsData(accessToken, date) {
 
 
 /**
- * Sincroniza datos de Google Fit con el daily service - MEJORADO
+ * Sincroniza datos de Google Fit con el daily service 
  */
 async function syncGoogleFitData(userId, accessToken, date) {
   try {
@@ -235,7 +235,7 @@ async function syncGoogleFitData(userId, accessToken, date) {
 
     console.log('Sync data prepared:', syncData);
 
-    // Enviar datos al daily service - CON MEJOR MANEJO DE ERRORES
+    // Enviar datos al daily service 
     const dailyServicePort = process.env.DAILY_SERVICE_PORT || 3003;
     
     try {
@@ -262,11 +262,11 @@ async function syncGoogleFitData(userId, accessToken, date) {
         success: true
       };
     } catch (dailyError) {
-      console.error('❌ Error from daily service:', dailyError.response?.data || dailyError.message);
+      console.error('Error from daily service:', dailyError.response?.data || dailyError.message);
       throw new Error(`Daily service error: ${dailyError.response?.data?.message || dailyError.message}`);
     }
   } catch (error) {
-    console.error('❌ Error in syncGoogleFitData:', error);
+    console.error('Error in syncGoogleFitData:', error);
     throw new Error(`Failed to sync Google Fit data: ${error.message}`);
   }
 }
@@ -282,7 +282,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     // Formatear fecha para consistencia
     const formattedDate = syncDate.toISOString().split('T')[0];
     
-    console.log(`🔄 Manual sync requested for user ${req.user.id}, date: ${formattedDate}`);
+    console.log(`Manual sync requested for user ${req.user.id}, date: ${formattedDate}`);
     
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -300,7 +300,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     // Determinar si forzar simulación
     const useSimulation = force_simulation || googleFitIntegration.is_simulation;
 
-    console.log(`🔧 Sync mode: ${useSimulation ? 'simulation' : 'real'}`);
+    console.log(`Sync mode: ${useSimulation ? 'simulation' : 'real'}`);
 
     // Realizar sincronización
     const syncResult = await syncGoogleFitData(
@@ -313,7 +313,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     googleFitIntegration.last_sync_at = new Date();
     await user.save();
 
-    console.log(`✅ Sync completed for user ${req.user.id}`);
+    console.log(`Sync completed for user ${req.user.id}`);
 
     res.json({
       message: useSimulation ? 'Data synced successfully (Simulation)' : 'Data synced successfully',
@@ -323,7 +323,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Google Fit sync error:', error);
+    console.error('Google Fit sync error:', error);
     res.status(500).json({ 
       message: 'Failed to sync Google Fit data',
       error: error.message 
@@ -432,15 +432,14 @@ app.post('/auth/login', async (req, res) => {
 });
 
 // =============================================================================
-// USER PROFILE ROUTES - CORREGIDOS
+// USER PROFILE ROUTES 
 // =============================================================================
 
 /**
- * Get current user profile - CORREGIDO
+ * Get current user profile 
  */
 app.get('/users/me', auth, async (req, res) => {
   try {
-    // CORREGIDO: usar req.user.id en lugar de req.userId
     const user = await User.findById(req.user.id).select('-password_hash');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -458,7 +457,7 @@ app.get('/users/me', auth, async (req, res) => {
 });
 
 /**
- * Update user profile - CORREGIDO
+ * Update user profile 
  */
 app.patch('/users/me', auth, async (req, res) => {
   try {
@@ -481,11 +480,11 @@ app.patch('/users/me', auth, async (req, res) => {
 });
 
 // =============================================================================
-// GOOGLE FIT INTEGRATION ROUTES - CORREGIDOS
+// GOOGLE FIT INTEGRATION ROUTES
 // =============================================================================
 
 /**
- * Connect Google Fit account (real o simulado) - CORREGIDO
+ * Connect Google Fit account (real o simulado) 
  */
 app.post('/users/me/google-fit/connect', auth, async (req, res) => {
   try {
@@ -583,7 +582,7 @@ app.post('/users/me/google-fit/connect', auth, async (req, res) => {
 
 
 /**
- * Manual Google Fit synchronization - MEJORADO
+ * Manual Google Fit synchronization 
  */
 app.post('/users/me/google-fit/sync', auth, async (req, res) => {
   try {
@@ -593,7 +592,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     // Formatear fecha para consistencia
     const formattedDate = syncDate.toISOString().split('T')[0];
     
-    console.log(`🔄 Manual sync requested for user ${req.user.id}, date: ${formattedDate}`);
+    console.log(`Manual sync requested for user ${req.user.id}, date: ${formattedDate}`);
     
     const user = await User.findById(req.user.id);
     if (!user) {
@@ -611,7 +610,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     // Determinar si forzar simulación
     const useSimulation = force_simulation || googleFitIntegration.is_simulation;
 
-    console.log(`🔧 Sync mode: ${useSimulation ? 'simulation' : 'real'}`);
+    console.log(`Sync mode: ${useSimulation ? 'simulation' : 'real'}`);
 
     // Realizar sincronización
     const syncResult = await syncGoogleFitData(
@@ -624,7 +623,7 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     googleFitIntegration.last_sync_at = new Date();
     await user.save();
 
-    console.log(`✅ Sync completed for user ${req.user.id}`);
+    console.log(`Sync completed for user ${req.user.id}`);
 
     res.json({
       message: useSimulation ? 'Data synced successfully (Simulation)' : 'Data synced successfully',
@@ -634,14 +633,13 @@ app.post('/users/me/google-fit/sync', auth, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Google Fit sync error:', error);
+    console.error('Google Fit sync error:', error);
     res.status(500).json({ 
       message: 'Failed to sync Google Fit data',
       error: error.message 
     });
   }
 });
-
 
 
 /**
@@ -674,11 +672,11 @@ app.post('/users/me/google-fit/disconnect', auth, async (req, res) => {
 });
 
 /**
- * Get Google Fit connection status - CORREGIDO
+ * Get Google Fit connection status 
  */
 app.get('/users/me/google-fit/status', auth, async (req, res) => {
   try {
-    // CORREGIDO: usar req.user.id
+    // Usar req.user.id
     const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -703,11 +701,11 @@ app.get('/users/me/google-fit/status', auth, async (req, res) => {
 });
 
 // =============================================================================
-// NOTIFICATION ROUTES - CORREGIDOS
+// NOTIFICATION ROUTES 
 // =============================================================================
 
 /**
- * Register notification token for push notifications - CORREGIDO
+ * Register notification token for push notifications
  */
 app.post('/users/me/notification-token', auth, async (req, res) => {
   try {
@@ -746,11 +744,11 @@ app.post('/users/me/notification-token', auth, async (req, res) => {
 });
 
 // =============================================================================
-// CRON JOBS - AUTOMATED TASKS - CORREGIDOS
+// CRON JOBS - AUTOMATED TASKS 
 // =============================================================================
 
 /**
- * Automatic Google Fit synchronization - runs daily at 6 AM - CORREGIDO
+ * Automatic Google Fit synchronization - runs daily at 6 AM 
  */
 cron.schedule('0 6 * * *', async () => {
   try {
@@ -773,21 +771,20 @@ cron.schedule('0 6 * * *', async () => {
 
         if (!googleFitIntegration) continue;
 
-        // CORREGIDO: Pasar user._id correctamente
         await syncGoogleFitData(
           user._id.toString(),
           googleFitIntegration.access_token,
           yesterday
         );
 
-        console.log(`✅ Auto-synced Google Fit data for user ${user._id}`);
+        console.log(`Auto-synced Google Fit data for user ${user._id}`);
         
       } catch (userError) {
-        console.error(`❌ Error syncing user ${user._id}:`, userError.message);
+        console.error(`Error syncing user ${user._id}:`, userError.message);
       }
     }
   } catch (error) {
-    console.error('❌ Error in automatic Google Fit sync:', error);
+    console.error('Error in automatic Google Fit sync:', error);
   }
 });
 

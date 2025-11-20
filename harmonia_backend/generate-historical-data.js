@@ -1,4 +1,3 @@
-// generate-historical-data.js
 require('dotenv').config();
 const mongoose = require('mongoose');
 const axios = require('axios');
@@ -8,8 +7,8 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/harmon
 
 // IDs de usuarios
 const USERS = [
-  '691b19cbf3001363c9b4da0c', // luis
-  '691b1f5ef3001363c9b4eb23'  // sara hernandez
+  '691b19cbf3001363c9b4da0c',
+  '691b1f5ef3001363c9b4eb23'  
 ];
 
 // Configuración de servicios
@@ -202,7 +201,7 @@ async function syncWellbeingData(userId, date, sleepHours, steps) {
     });
     return true;
   } catch (error) {
-    console.error(`❌ Error sincronizando wellbeing para usuario ${userId}:`, error.message);
+    console.error(`Error sincronizando wellbeing para usuario ${userId}:`, error.message);
     return false;
   }
 }

@@ -167,7 +167,7 @@ async function createMoodEntryFromResponse(userId, action, responseText, notific
  */
 cron.schedule(process.env.NOTIFICATION_CRON_SCHEDULE || '0 9,14,17,21 * * *', async () => {
   try {
-    console.log('🔔 Scheduling notifications...');
+    console.log('Scheduling notifications...');
     
     const users = await User.find({
       'settings.notifications_enabled': true
@@ -180,11 +180,11 @@ cron.schedule(process.env.NOTIFICATION_CRON_SCHEDULE || '0 9,14,17,21 * * *', as
       try {
         await scheduleNotificationForUser(user, currentHour, now);
       } catch (userError) {
-        console.error(`❌ Error scheduling notification for user ${user._id}:`, userError);
+        console.error(`Error scheduling notification for user ${user._id}:`, userError);
       }
     }
   } catch (error) {
-    console.error('❌ Error in notification scheduling:', error);
+    console.error('Error in notification scheduling:', error);
   }
 });
 
@@ -220,7 +220,7 @@ async function scheduleNotificationForUser(user, currentHour, now) {
   };
 
   await dailyRecord.save();
-  console.log(`📨 Notification scheduled for user ${user._id}: ${notificationType}`);
+  console.log(`Notification scheduled for user ${user._id}: ${notificationType}`);
 }
 
 /**
@@ -334,23 +334,22 @@ app.post('/daily/notifications/handle-response', auth, async (req, res) => {
 
 
 /**
- * Sync wellbeing data (Google Fit, etc.) - CORREGIDO Y MEJORADO
+ * Sync wellbeing data (Google Fit, etc.) 
  */
 
-
-// CORREGIR el endpoint de sync wellbeing - EVITAR AUTO-PREDICTION
+// Endpoint de sync wellbeing - EVITAR AUTO-PREDICTION
 app.post('/daily/wellbeing/sync', auth, async (req, res) => {
   try {
-    const { sleep_hours, steps, source, date, skip_auto_prediction = false } = req.body; // NUEVO PARÁMETRO
+    const { sleep_hours, steps, source, date, skip_auto_prediction = false } = req.body; 
     const syncDate = date ? new Date(date) : new Date();
     
-    console.log(`📊 Received wellbeing sync:`, { 
+    console.log(`Received wellbeing sync:`, { 
       userId: req.userId, 
       sleep_hours, 
       steps, 
       source,
       date: syncDate,
-      skip_auto_prediction // LOG NUEVO
+      skip_auto_prediction 
     });
     
     const dailyRecord = await findOrCreateDailyRecord(req.userId, syncDate);
@@ -365,9 +364,9 @@ app.post('/daily/wellbeing/sync', auth, async (req, res) => {
     
     await dailyRecord.save();
     
-    console.log('✅ Wellbeing data saved successfully for user:', req.userId);
+    console.log('Wellbeing data saved successfully for user:', req.userId);
     
-    // EVITAR AUTO-PREDICTION EN BUCLES - CORREGIDO
+    // EVITAR AUTO-PREDICTION EN BUCLES 
     if (!skip_auto_prediction) {
       // Disparar predicción con retraso y solo si es necesario
       setTimeout(async () => {
@@ -379,7 +378,7 @@ app.post('/daily/wellbeing/sync', auth, async (req, res) => {
           
           // Solo predecir si no hay predicción reciente (>30 minutos)
           if (predictionAge > 30 * 60 * 1000) {
-            console.log('🤖 Triggering auto-prediction after sync');
+            console.log('Triggering auto-prediction after sync');
             await axios.post(
               `http://localhost:${PORT}/daily/stress/predict`,
               { force_refresh: true },
@@ -391,7 +390,7 @@ app.post('/daily/wellbeing/sync', auth, async (req, res) => {
           }
         } catch (predError) {
           console.log('Auto-prediction skipped or failed:', predError.message);
-          // NO relanzar el error - evitar bucles
+        
         }
       }, 2000); // Retraso de 2 segundos
     }
@@ -405,7 +404,7 @@ app.post('/daily/wellbeing/sync', auth, async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('❌ Wellbeing sync error:', error);
+    console.error('Wellbeing sync error:', error);
     res.status(500).json({ 
       message: 'Server error during wellbeing sync',
       error: error.message 
@@ -415,7 +414,7 @@ app.post('/daily/wellbeing/sync', auth, async (req, res) => {
 
 
 /**
- * Get today's wellbeing data - NUEVO ENDPOINT
+ * Get today's wellbeing data
  */
 app.get('/daily/wellbeing/today', auth, async (req, res) => {
   try {
@@ -601,7 +600,7 @@ app.get('/daily/alerts/today', auth, async (req, res) => {
 });
 
 /**
- * Update alert status - ✅ ÚNICA DEFINICIÓN CORREGIDA
+ * Update alert status 
  */
 app.patch('/daily/alerts/:id', auth, async (req, res) => {
   try {
@@ -616,7 +615,7 @@ app.patch('/daily/alerts/:id', auth, async (req, res) => {
       return res.status(404).json({ message: 'Alert not found' });
     }
     
-    // Update alert - ✅ CORREGIDO: Asegurar que alert existe
+    // Update alert 
     dailyRecord.alert = dailyRecord.alert || {};
     if (clicked !== undefined) dailyRecord.alert.clicked = clicked;
     if (completed_action !== undefined) dailyRecord.alert.completed_action = completed_action;
@@ -646,7 +645,7 @@ app.post('/daily/sessions', auth, async (req, res) => {
     
     const dailyRecord = await findOrCreateDailyRecord(req.userId);
     
-    // Add session - ✅ CORREGIDO: sessions ahora es array en el modelo
+    // Add session 
     dailyRecord.sessions = dailyRecord.sessions || [];
     dailyRecord.sessions.push({
       exercise_id,
@@ -708,7 +707,7 @@ app.get('/daily/sessions', auth, async (req, res) => {
 
 
 /**
- * Get weekly summary - COMPLETAMENTE CORREGIDA Y COMPLETA
+ * Get weekly summary 
  */
 app.get('/daily/summary/weekly', auth, async (req, res) => {
   try {
@@ -723,7 +722,7 @@ app.get('/daily/summary/weekly', auth, async (req, res) => {
     endDate.setDate(startDate.getDate() + 6); // Hasta domingo
     endDate.setHours(23, 59, 59, 999);
 
-    console.log(`📅 Buscando registros semanales: ${startDate.toISOString()} a ${endDate.toISOString()}`);
+    console.log(`Buscando registros semanales: ${startDate.toISOString()} a ${endDate.toISOString()}`);
 
     // Obtener registros de la semana
     const records = await DailyRecord.find({
@@ -733,7 +732,7 @@ app.get('/daily/summary/weekly', auth, async (req, res) => {
     .populate('sessions.exercise_id')
     .sort({ date: 1 });
 
-    console.log(`📊 Encontrados ${records.length} registros para la semana`);
+    console.log(`Encontrados ${records.length} registros para la semana`);
 
     // Calcular estadísticas semanales
     const summary = calculateWeeklySummary(records);
@@ -755,7 +754,7 @@ app.get('/daily/summary/weekly', auth, async (req, res) => {
     });
 
   } catch (error) {
-    console.error('❌ Error en weekly summary:', error);
+    console.error('Error en weekly summary:', error);
     res.status(500).json({ 
       success: false,
       message: 'Error al generar el resumen semanal',
@@ -765,7 +764,7 @@ app.get('/daily/summary/weekly', auth, async (req, res) => {
 });
 
 /**
- * Calcular resumen semanal - NUEVA FUNCIÓN MEJORADA
+ * Calcular resumen semanal 
  */
 function calculateWeeklySummary(records) {
   const summary = {
@@ -828,7 +827,7 @@ function calculateWeeklySummary(records) {
 }
 
 /**
- * Calcular tendencia semanal - NUEVA FUNCIÓN
+ * Calcular tendencia semanal 
  */
 function calculateWeeklyTrend(records, metric) {
   if (records.length < 3) return 'stable';
@@ -866,7 +865,7 @@ function calculateWeeklyTrend(records, metric) {
 }
 
 /**
- * Calcular promedio de un campo - NUEVA FUNCIÓN AUXILIAR
+ * Calcular promedio de un campo 
  */
 function calculateAverage(records, fieldPath) {
   const values = records.map(record => {
@@ -979,13 +978,13 @@ function calculateMoodTrend(records) {
  * Generate stress prediction for today
  */
 
-// En daily-records-service/index.js - MEJORAR el endpoint de predicción
+// En daily-records-service/index.js 
 
 app.post('/daily/stress/predict', auth, async (req, res) => {
   try {
     const { force_refresh = false } = req.body;
     
-    console.log(`🧠 Starting stress prediction for user: ${req.userId}`);
+    console.log(`Starting stress prediction for user: ${req.userId}`);
     
     // Obtener registro de hoy con manejo de errores
     let dailyRecord;
@@ -1025,7 +1024,7 @@ app.post('/daily/stress/predict', auth, async (req, res) => {
       historicalData = []; // Continuar con array vacío
     }
     
-    console.log(`📊 Historical data found: ${historicalData.length} records`);
+    console.log(`Historical data found: ${historicalData.length} records`);
     
     let stressPrediction;
     let recommendations = [];
@@ -1038,7 +1037,7 @@ app.post('/daily/stress/predict', auth, async (req, res) => {
         historicalData
       );
       
-      console.log(`✅ Prediction generated: ${stressPrediction.score} (${stressPrediction.level})`);
+      console.log(`Prediction generated: ${stressPrediction.score} (${stressPrediction.level})`);
       
       // Generar recomendaciones
       recommendations = await RecommendationEngine.generateRecommendations(
@@ -1047,16 +1046,16 @@ app.post('/daily/stress/predict', auth, async (req, res) => {
         historicalData
       );
       
-      console.log(`📋 Recommendations generated: ${recommendations.length}`);
+      console.log(`Recommendations generated: ${recommendations.length}`);
       
     } catch (predictionError) {
-      console.error('❌ Error in prediction process:', predictionError);
+      console.error('Error in prediction process:', predictionError);
       
       // Usar predicción por defecto
       stressPrediction = StressPredictor.getDefaultPrediction();
       recommendations = RecommendationEngine.getFallbackRecommendations('medium');
       
-      console.log('🔄 Using fallback prediction due to error');
+      console.log('Using fallback prediction due to error');
     }
     
     // Actualizar registro
@@ -1069,7 +1068,7 @@ app.post('/daily/stress/predict', auth, async (req, res) => {
       // Continuar aunque falle el guardado
     }
     
-    // Verificar si se necesita alerta (no crítico si falla)
+    // Verificar si se necesita alerta 
     try {
       await checkAndCreateAlerts(req.userId, dailyRecord, stressPrediction);
     } catch (alertError) {
@@ -1083,7 +1082,7 @@ app.post('/daily/stress/predict', auth, async (req, res) => {
     });
     
   } catch (error) {
-    console.error('❌ Overall stress prediction error:', error);
+    console.error('Overall stress prediction error:', error);
     
     // Último recurso: predicción por defecto
     const defaultPrediction = StressPredictor.getDefaultPrediction();
@@ -1212,10 +1211,10 @@ app.get('/daily/recommendations/active', auth, async (req, res) => {
  * Check and create alerts based on stress prediction
  */
 
-// MEJORAR la función checkAndCreateAlerts para evitar race conditions
+// Función checkAndCreateAlerts para evitar race conditions
 async function checkAndCreateAlerts(userId, dailyRecord, stressPrediction) {
   try {
-    // OBTENER SIEMPRE LA VERSIÓN MÁS RECIENTE - CORREGIDO
+    // OBTENER SIEMPRE LA VERSIÓN MÁS RECIENTE 
     const freshRecord = await DailyRecord.findById(dailyRecord._id);
     if (!freshRecord) {
       console.log('⚠️ Record not found for alerts, skipping');
@@ -1264,19 +1263,18 @@ async function checkAndCreateAlerts(userId, dailyRecord, stressPrediction) {
       // GUARDADO SEGURO con reintentos
       try {
         await freshRecord.save();
-        console.log(`✅ Created ${alerts.length} alerts for user ${userId}`);
+        console.log(`Created ${alerts.length} alerts for user ${userId}`);
       } catch (saveError) {
-        console.log('⚠️ Alert save conflict, skipping:', saveError.message);
+        console.log('Alert save conflict, skipping:', saveError.message);
         // No reintentar - evitar bucles
       }
     }
     
   } catch (error) {
-    console.error('❌ Error in checkAndCreateAlerts:', error.message);
+    console.error('Error in checkAndCreateAlerts:', error.message);
     // NO relanzar - evitar que rompa el flujo principal
   }
 }
-
 
 
 /**
@@ -1422,7 +1420,7 @@ function calculateStressStats(records) {
  */
 cron.schedule('0 8,14,20 * * *', async () => {
   try {
-    console.log('🤖 Starting automated stress prediction...');
+    console.log('Starting automated stress prediction...');
     
     // Obtener usuarios activos
     const users = await User.find({});
@@ -1434,13 +1432,13 @@ cron.schedule('0 8,14,20 * * *', async () => {
           { force_refresh: false },
           { headers: { 'x-user-id': user._id.toString() } }
         );
-        console.log(`✅ Auto-prediction for user ${user._id}`);
+        console.log(`Auto-prediction for user ${user._id}`);
       } catch (userError) {
-        console.error(`❌ Auto-prediction failed for user ${user._id}:`, userError.message);
+        console.error(`Auto-prediction failed for user ${user._id}:`, userError.message);
       }
     }
   } catch (error) {
-    console.error('❌ Error in automated stress prediction:', error);
+    console.error('Error in automated stress prediction:', error);
   }
 });
 

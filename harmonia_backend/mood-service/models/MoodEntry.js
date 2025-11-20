@@ -32,7 +32,7 @@ const moodEntrySchema = new mongoose.Schema({
   }
 });
 
-// SOLO ESTOS ÍNDICES - ELIMINADO EL DUPLICADO
+
 moodEntrySchema.index({ user_id: 1, date: 1 });
 
 

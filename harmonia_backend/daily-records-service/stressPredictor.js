@@ -1,4 +1,3 @@
-// daily-records-service/stressPredictor.js - VERSIÓN CORREGIDA
 class StressPredictor {
   constructor() {
     this.modelVersion = '1.2'; // Versión actualizada
@@ -12,15 +11,15 @@ class StressPredictor {
   }
 
   /**
-   * Predice el nivel de estrés basado en múltiples factores - CORREGIDO
+   * Predice el nivel de estrés basado en múltiples factores
    */
   async predictStress(userId, currentData, historicalData = []) {
     try {
-      console.log(`🔍 PredictStress iniciado para usuario: ${userId}`);
+      console.log(`PredictStress iniciado para usuario: ${userId}`);
       
       // Validar datos de entrada - CORREGIDO
       if (!currentData) {
-        console.warn('⚠️ currentData es null o undefined, usando datos por defecto');
+        console.warn('currentData es null o undefined, usando datos por defecto');
         return this.getDefaultPrediction();
       }
 
@@ -31,7 +30,7 @@ class StressPredictor {
       const consistencyScore = this.calculateConsistencyScore(historicalData);
       const historicalScore = this.calculateHistoricalStressScore(historicalData);
 
-      console.log(`📊 Scores calculados:`, {
+      console.log(`Scores calculados:`, {
         sleep: sleepScore,
         activity: activityScore,
         mood: moodScore,
@@ -79,24 +78,24 @@ class StressPredictor {
         generated_at: new Date()
       };
 
-      console.log(`✅ Predicción completada: ${totalScore} (${stressLevel})`);
+      console.log(`Predicción completada: ${totalScore} (${stressLevel})`);
       return prediction;
 
     } catch (error) {
-      console.error('❌ Error crítico en predictStress:', error);
+      console.error('Error crítico en predictStress:', error);
       // Retornar predicción por defecto en caso de error
       return this.getDefaultPrediction();
     }
   }
 
   /**
-   * Calcula score basado en horas de sueño - CORREGIDO
+   * Calcula score basado en horas de sueño 
    */
   calculateSleepScore(sleepHours) {
     try {
-      // Validación exhaustiva - CORREGIDO
+      // Validación exhaustiva 
       if (sleepHours === undefined || sleepHours === null || sleepHours === 0 || isNaN(sleepHours)) {
-        console.log('⚠️ calculateSleepScore: datos de sueño no disponibles, usando valor por defecto');
+        console.log('calculateSleepScore: datos de sueño no disponibles, usando valor por defecto');
         return 70; // Alto estrés si no hay datos
       }
 
@@ -116,13 +115,13 @@ class StressPredictor {
   }
 
   /**
-   * Calcula score basado en actividad física - CORREGIDO
+   * Calcula score basado en actividad física
    */
   calculateActivityScore(steps) {
     try {
-      // Validación exhaustiva - CORREGIDO
+      // Validación exhaustiva 
       if (steps === undefined || steps === null || steps === 0 || isNaN(steps)) {
-        console.log('⚠️ calculateActivityScore: datos de pasos no disponibles, usando valor por defecto');
+        console.log('calculateActivityScore: datos de pasos no disponibles, usando valor por defecto');
         return 60; // Medio-alto si no hay datos
       }
 
@@ -147,7 +146,7 @@ class StressPredictor {
     try {
       // Validación exhaustiva - CORREGIDO
       if (!moodEntries || !Array.isArray(moodEntries) || moodEntries.length === 0) {
-        console.log('⚠️ calculateMoodScore: no hay entradas de ánimo, usando valor por defecto');
+        console.log('calculateMoodScore: no hay entradas de ánimo, usando valor por defecto');
         return 50; // Neutral si no hay datos
       }
 
@@ -163,7 +162,7 @@ class StressPredictor {
         .filter(score => score !== null && !isNaN(score)); // Filtrar valores inválidos
 
       if (recentMoods.length === 0) {
-        console.log('⚠️ calculateMoodScore: no hay puntajes de ánimo válidos');
+        console.log('calculateMoodScore: no hay puntajes de ánimo válidos');
         return 50;
       }
 
@@ -184,13 +183,13 @@ class StressPredictor {
   }
 
   /**
-   * Calcula consistencia en rutinas - CORREGIDO
+   * Calcula consistencia en rutinas 
    */
   calculateConsistencyScore(historicalData) {
     try {
-      // Validación de entrada - CORREGIDO
+      // Validación de entrada 
       if (!historicalData || !Array.isArray(historicalData) || historicalData.length < 3) {
-        console.log('⚠️ calculateConsistencyScore: historial insuficiente');
+        console.log('calculateConsistencyScore: historial insuficiente');
         return 50; // Neutral si no hay suficiente historial
       }
 
@@ -211,11 +210,11 @@ class StressPredictor {
   }
 
   /**
-   * Calcula score basado en historial de estrés - CORREGIDO
+   * Calcula score basado en historial de estrés 
    */
   calculateHistoricalStressScore(historicalData) {
     try {
-      // Validación de entrada - CORREGIDO
+      // Validación de entrada 
       if (!historicalData || !Array.isArray(historicalData) || historicalData.length === 0) {
         return 50;
       }
@@ -223,7 +222,7 @@ class StressPredictor {
       const recentStressScores = historicalData
         .slice(-5) // Últimos 5 días
         .map(record => {
-          // Validar cada registro - CORREGIDO
+          // Validar cada registro 
           if (!record || !record.stress_prediction || typeof record.stress_prediction.score !== 'number') {
             return null;
           }
@@ -244,7 +243,7 @@ class StressPredictor {
   }
 
   /**
-   * Calcula el score total ponderado de forma segura - NUEVO MÉTODO
+   * Calcula el score total ponderado de forma segura
    */
   calculateTotalScore(scores) {
     try {
@@ -262,7 +261,7 @@ class StressPredictor {
 
       // Si no hay scores válidos, retornar valor por defecto
       if (totalWeight === 0) {
-        console.warn('⚠️ No hay scores válidos para calcular total');
+        console.warn('No hay scores válidos para calcular total');
         return 50;
       }
 
@@ -275,7 +274,7 @@ class StressPredictor {
   }
 
   /**
-   * Determina el nivel de estrés basado en el score - CORREGIDO
+   * Determina el nivel de estrés basado en el score 
    */
   determineStressLevel(score) {
     try {
@@ -293,7 +292,7 @@ class StressPredictor {
   }
 
   /**
-   * Identifica factores clave que contribuyen al estrés - CORREGIDO
+   * Identifica factores clave que contribuyen al estrés
    */
   identifyKeyFactors(scores, totalScore) {
     try {
@@ -349,7 +348,7 @@ class StressPredictor {
   }
 
   /**
-   * Obtiene el factor principal - NUEVO MÉTODO AUXILIAR
+   * Obtiene el factor principal 
    */
   getMainFactor(scores) {
     try {
@@ -370,7 +369,7 @@ class StressPredictor {
   }
 
   /**
-   * Obtiene descripción del factor - NUEVO MÉTODO UNIFICADO
+   * Obtiene descripción del factor 
    */
   getFactorDescription(factor, score) {
     const normalizedScore = typeof score === 'number' ? score : 50;
@@ -412,7 +411,7 @@ class StressPredictor {
   }
 
   /**
-   * Calcula confianza del modelo basada en datos disponibles - CORREGIDO
+   * Calcula confianza del modelo basada en datos disponibles 
    */
   calculateConfidence(currentData, historicalData) {
     try {
@@ -449,7 +448,7 @@ class StressPredictor {
   }
 
   /**
-   * Predicción por defecto cuando hay errores - MEJORADO
+   * Predicción por defecto cuando hay errores 
    */
   getDefaultPrediction() {
     return {

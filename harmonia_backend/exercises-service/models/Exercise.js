@@ -30,7 +30,7 @@ const exerciseSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique: true, // Ya crea un índice único automáticamente
+    unique: true, 
     trim: true
   },
   title: {
@@ -61,7 +61,7 @@ const exerciseSchema = new mongoose.Schema({
   }
 });
 
-// SOLO ESTOS ÍNDICES - ELIMINADO EL DUPLICADO DE SLUG
+
 exerciseSchema.index({ category: 1, active: 1 });
 exerciseSchema.index({ tags: 1 });
 

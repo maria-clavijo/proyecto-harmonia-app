@@ -38,10 +38,9 @@ const auth = async (req, res, next) => {
  * Create mood entry
  */
 
-// En mood-service/index.js - CORREGIR el endpoint de mood
 app.post('/mood', auth, async (req, res) => {
   try {
-    const { mood_score, note, tags, date, skip_auto_prediction = false } = req.body; // NUEVO PARÁMETRO
+    const { mood_score, note, tags, date, skip_auto_prediction = false } = req.body;
     
     // Validar score
     if (mood_score < 0 || mood_score > 100) {
@@ -71,7 +70,7 @@ app.post('/mood', auth, async (req, res) => {
             }
           );
         } catch (predError) {
-          console.log('⚠️ Mood-triggered prediction failed:', predError.message);
+          console.log('Mood-triggered prediction failed:', predError.message);
         }
       }, 3000); // Retraso más largo
     }
