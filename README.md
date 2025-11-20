@@ -1,42 +1,28 @@
 # Harmonia - Tu Compañero de Bienestar Mental
 
 ![Harmonia Logo](https://img.shields.io/badge/Harmonia-Bienestar_Mental-6A5ACD?style=for-the-badge&logo=heart&logoColor=white)
-![License](https://img.shields.io/badge/Licencia-MIT-blue?style=for-the-badge)
 ![Node.js](https://img.shields.io/badge/Node.js-16%2B-green?style=for-the-badge&logo=node.js)
 ![MongoDB](https://img.shields.io/badge/MongoDB-Database-green?style=for-the-badge&logo=mongodb)
-![Machine Learning](https://img.shields.io/badge/AI-Powered_Model-orange?style=for-the-badge&logo=python)
+![Machine Learning](https://img.shields.io/badge/AI-Model-orange?style=for-the-badge&logo=python)
 
 ---
 
 ## Tabla de Contenidos
 
-- [Introducción](#-introducción)
-- [Características Principales](#-características-principales)
+- [Introducción](#introduccion)
+- [Características Principales](#caracteristicas-principales)
 - [Modelos Entrenados y Notebook](#modelos-entrenados-y-notebook-de-entrenamiento)
-- [Tecnologías Utilizadas](#️-tecnologías-utilizadas)
-- [Arquitectura del Sistema](#️-arquitectura-del-sistema)
-- [Instalación y Configuración](#-instalación-y-configuración)
-- [Uso de la Aplicación](#-uso-de-la-aplicación)
-- [Desarrollo](#-desarrollo)
-- [API Documentation](#-api-documentation)
-- [Licencia](#-licencia)
+- [Tecnologías Utilizadas](#tecnologias-utilizadas)
+- [Arquitectura del Sistema](#arquitectura-del-sistema)
+- [Instalación y Configuración](#instalacion-y-configuracion)
+- [Uso de la Aplicación](#uso-de-la-aplicacion)
+- [Desarrollo](#desarrollo)
+- [API Documentation](#api-documentation)
+
 
 ## Introducción
 
 **Harmonia** es una aplicación de bienestar mental que combina inteligencia artificial, seguimiento de salud y técnicas de mindfulness para ayudarte a gestionar el estrés y mejorar tu calidad de vida.
-
-### ¿Qué resuelve Harmonia?
-
-- **Detección proactiva** de niveles de estrés mediante machine learning
-- **Seguimiento automático** de patrones de sueño y actividad física
-- **Ejercicios personalizados** basados en tu estado emocional
-- **Recomendaciones inteligentes** para mejorar tu bienestar
-- **Integración seamless** con Google Fit y otros servicios de salud
-
-### Público Objetivo
-
-- **Jovenes profesionales** con alta carga laboral que buscan herramientas de gestión
-- **Estudiantes universitarios** con mayor exposición a picos de estrés academico que usan el celular como herrmienta diaria
 
 
 ## Características Principales
@@ -63,26 +49,23 @@
 
 ### **Check-in Emocional**
 - Registro fácil de tu estado de ánimo
-- Sistema de etiquetas para categorizar emociones
-- Notas personales para reflexionar (hasta 140 caracteres)
+- Etiquetas y notas personales
 - Integración automática con el sistema de predicción
 
-### **Resumen Semanal Avanzado**
+### **Resumen Semanal**
 - Análisis de tendencias y progreso
 - Recomendaciones personalizadas basadas en tu semana
-- Comparativas con semanas anteriores
-- Insights accionables
+- Promedios de sueño, actividad, estrés
 
 ### **Panel de Administración**
 - Gestión completa de ejercicios
 - Creación y edición de contenido
 - Modo administrador con vistas especiales
-- Herramientas de moderación
 
 
 ## Modelos Entrenados y Notebook
 
-### Modelos de Machine Learning
+### Modelos de Machine Learning y Dataset
 
 | Tipo | Archivo | Descripción |
 |------|---------|-------------|
@@ -93,7 +76,6 @@
 Los modelos fueron generados en el notebook:
 
 notebooks/stress_model.ipynb
-
 
 ### **¿Qué contiene el notebook?**
 
@@ -115,6 +97,7 @@ Database: MongoDB con Mongoose
 Authentication: JWT (JSON Web Tokens)
 APIs: Google Fit, servicios personalizados
 Cron Jobs: node-cron para tareas automatizadas
+```
 
 ### **Frontend**
 ```yaml
@@ -123,6 +106,7 @@ Lenguaje: JavaScript Vanilla (ES6+)
 Styling: CSS3 con Variables Custom
 Icons: Font Awesome 6
 Design: Mobile-First, Responsive
+```
 
 ### **Características Técnicas**
 ```yaml
@@ -131,6 +115,7 @@ Comunicación: REST APIs
 Estado: JWT + Local Storage
 CORS: Configurado para desarrollo
 Environment: Variables de entorno
+```
 
 ### **Inteligencia Artificial**
 ```yaml
@@ -138,7 +123,7 @@ Environment: Variables de entorno
 - Scikit-Learn  
 - Pandas / NumPy  
 - Matplotlib / Seaborn 
-
+```
 
 ## Arquitectura del Sistema
 
@@ -157,7 +142,10 @@ Environment: Variables de entorno
 - **Recomendaciones** → Recommendation Engine
 
 ### **Base de Datos**
-// Esquemas principales - colecciones 
+ 
+```javascript
+// Esquemas principales - colecciones
+
 User: {
   name, email, password_hash, role, settings,
   integrations: [google_fit, apple_health],
@@ -179,7 +167,7 @@ Exercise: {
   content: {steps, video_url, audio_url, youtube_id},
   active, tags, created_at
 }
-
+```
 
 ## Instalación y Configuración
 
@@ -188,12 +176,13 @@ Exercise: {
 Node.js 16+ instalado
 MongoDB local o en la nube
 Git para clonar el repositorio
+```
 
 ### **1. Clonar el Repositorio**
 ```bash
 git clone https://github.com/maria-clavijo/proyecto-harmonia-app.git
 cd proyecto-harmonia-app
-
+```
 
 ### **2. Configuración del Backend**
 ```bash
@@ -202,15 +191,12 @@ cd harmonia_backend
 
 # Instalar dependencias
 npm install
+```
 
-# Configurar variables de entorno
-cp .env.example .env
+### Configurar variables de entorno
+Crea un archivo llamado `.env` dentro de `harmonia_backend/` con el siguiente contenido:
 
-# Editar .env con tu configuración
-nano .env
-
-Archivo .env de ejemplo:
-
+```env
 # Database
 MONGODB_URI=mongodb://localhost:27017/harmonia-app
 
@@ -220,16 +206,13 @@ MOOD_SERVICE_PORT=3002
 DAILY_SERVICE_PORT=3003
 EXERCISES_SERVICE_PORT=3004
 
-# JWT Secret
-JWT_SECRET=tu_jwt_secret_seguro
-
-# Google Fit (Opcional)
-GOOGLE_FIT_CLIENT_ID=
-GOOGLE_FIT_CLIENT_SECRET=
+# Auth
+JWT_SECRET=changeme
 
 # App Mode
 NODE_ENV=development
 USE_GOOGLE_FIT_SIMULATION=true
+```
 
 
 ### **3. Configuración del Frontend**
@@ -238,6 +221,7 @@ USE_GOOGLE_FIT_SIMULATION=true
 cd ../harmonia_frontend
 
 # El frontend no requiere instalación
+```
 
 ### **4. Ejecutar la Aplicación**
 ```bash
@@ -251,50 +235,26 @@ npm run dev
 # Opción 1: Usar Live Server en VS Code
 # Opción 2: Python simple HTTP server
 python -m http.server 8000
+```
 
 ### **5. Acceder a la Aplicación**
 ```text
 Frontend: http://localhost:8000
 API Health: http://localhost:3001/health
-
+```
 
 ## Uso de la Aplicación
 
 ### **Primeros Pasos**
 1. **Registro**: Crea tu cuenta con nombre, email, contraseña y país
 2. **Configuración Automática**: Se conecta Google Fit en modo simulación
-3. **Dashboard**: Ve tu estado actual y predicción de estrés
-4. **Check-in**: Registra tu primer estado de ánimo
+3. **Check-in**: Registra tu primer estado de ánimo
 
 ### **Dashboard Principal**
-- **Tarjeta de Estrés**: Nivel actual con factores explicativos
+- **Tarjeta de Estrés**: Nivel actual de estrés con factores explicativos
 - **Estadísticas**: Sueño, pasos, ejercicios completados
 - **Recomendaciones**: Ejercicios sugeridos basados en tu estado
 - **Alertas**: Notificaciones importantes sobre tu bienestar
-
-### **Ejercicios de Bienestar**
-```bash
-# Navegación:
-Dashboard → Ejercicios → Filtrar por categoría → Ver detalle → Comenzar
-
-# Categorías disponibles:
-- Respiración (Técnicas de relajación)
-- Mindfulness (Atención plena)
-- Meditación (Sesiones guiadas)
-- Sonido (Terapias auditivas)
-- Movimiento (Ejercicios suaves)
-
-### **Resumen Semanal**
-- **Tendencia**: Comparativa con semanas anteriores
-- **Métricas**: Promedios de sueño, actividad, estrés
-- **Recomendaciones**: Insights personalizados
-- **Progreso**: Evolución de tu bienestar
-
-### **Panel de Administración**
-- Solo disponible para usuarios con rol 'admin'
-- Gestión de Ejercicios: Crear, editar, eliminar
-- Contenido Multimedia: Videos de YouTube, instrucciones
-- Modo Usuario: Vista especial para testing
 
 
 ## Desarrollo
@@ -302,39 +262,26 @@ Dashboard → Ejercicios → Filtrar por categoría → Ver detalle → Comenzar
 ### **Estructura del Proyecto**
 ```text
 harmonia/
-├── harmonia_backend/
-│   ├── shared/                 # Código compartido entre servicios
-│   │   ├── auth.js            # Middleware de autenticación JWT
-│   │   └── database.js        # Conexión MongoDB con Mongoose
-│   ├── user-service/          # Servicio de usuarios (Puerto 3001)
-│   │   ├── models/
-│   │   │   └── User.js        # Esquema de usuario
-│   │   ├── index.js           # Servicio principal
-│   ├── mood-service/          # Servicio de estados de ánimo (3002)
-│   │   ├── models/
-│   │   │   └── MoodEntry.js   # Esquema de entradas de ánimo
-│   │   ├── index.js
-│   ├── daily-records-service/ # Servicio de registros diarios (3003)
-│   │   ├── models/
-│   │   │   └── DailyRecord.js # Esquema de registros diarios
-│   │   ├── stressPredictor.js # Motor de predicción de estrés
-│   │   ├── recommendationEngine.js # Motor de recomendaciones
-│   │   ├── index.js
-│   ├── exercises-service/     # Servicio de ejercicios (3004)
-│   │   ├── models/
-│   │   │   └── Exercise.js    # Esquema de ejercicios
-│   │   ├── index.js
-│   ├── generated-historical-data.js # Script de datos de prueba
-│   ├── models_ml/             # Modelos de IA
-│   └── package.json           # Scripts principales
-├── harmonia_frontend/
-│   ├── index.html            # Aplicación SPA principal
-│   ├── styles.css            # Estilos CSS completos
-│   ├── script.js             # Lógica JavaScript de la aplicación
+├── backend/
+│   ├── shared/                 # Middlewares, autenticación y DB
+│   ├── user-service/           # Servicio de usuarios (3001)
+│   ├── mood-service/           # Servicio de estados de ánimo (3002)
+│   ├── daily-records-service/  # Registros diarios + IA (3003)
+│   ├── exercises-service/      # Ejercicios y contenido (3004)
+│   ├── models_ml/              # Modelos de IA entrenados en Python
+│   ├── generated-historical-data.js
+│   └── package.json
+│
+├── frontend/
+│   ├── index.html
+│   ├── script.js
+│   └── styles.css
+│
 ├── notebooks/
-│   └── stress_model.ipynb
+│   └── stress_model_harmonia.ipynb
+│
 └── README.md
-
+```
 
 ### **Generación de Datos de Prueba**
 ```bash
@@ -347,9 +294,11 @@ node generated-historical-data.js
 // - Entradas de ánimo realistas
 // - Datos de sueño y actividad simulados
 // - Predicciones de estrés generadas
-
+```
 
 ## API Documentation
+
+Cada microservicio expone rutas independientes para gestionar usuarios, estados de ánimo, registros diarios y ejercicios.
 
 ### Endpoints Principales
 
@@ -357,6 +306,7 @@ node generated-historical-data.js
 ```http
 POST /auth/signup
 POST /auth/login
+```
 
 ### **Usuario**
 ```http
@@ -365,6 +315,7 @@ PATCH  /users/me
 POST   /users/me/google-fit/connect
 POST   /users/me/google-fit/sync
 POST   /users/me/google-fit/disconnect
+```
 
 ### **Estados de Ánimo**
 ```http
@@ -373,6 +324,7 @@ GET    /mood
 GET    /mood/stats
 PATCH  /mood/:id
 DELETE /mood/:id
+```
 
 ### **Registros Diarios**
 ```http
@@ -382,6 +334,7 @@ POST   /daily/stress/predict
 GET    /daily/stress/today
 GET    /daily/summary/weekly
 POST   /daily/mood
+```
 
 ### **Ejercicios**
 ```http
@@ -390,7 +343,4 @@ GET    /exercises/:id
 POST   /exercises (admin)
 PATCH  /exercises/:id (admin)
 DELETE /exercises/:id (admin)
-
-
-## Licencia
-- Este proyecto está bajo la Licencia MIT 
+```
