@@ -9,13 +9,13 @@
 
 ## Tabla de Contenidos
 
-- [Introducción](#introduccion)
-- [Características Principales](#caracteristicas-principales)
-- [Modelos Entrenados y Notebook](#modelos-entrenados-y-notebook-de-entrenamiento)
-- [Tecnologías Utilizadas](#tecnologias-utilizadas)
+- [Introducción](#introducci%C3%B3n)
+- [Características Principales](#caracter%C3%ADsticas-principales)
+- [Modelos Entrenados y Notebook](#modelos-entrenados-y-notebook)
+- [Tecnologías Utilizadas](#tecnolog%C3%ADas-utilizadas)
 - [Arquitectura del Sistema](#arquitectura-del-sistema)
-- [Instalación y Configuración](#instalacion-y-configuracion)
-- [Uso de la Aplicación](#uso-de-la-aplicacion)
+- [Instalación y Configuración](#instalaci%C3%B3n-y-configuraci%C3%B3n)
+- [Uso de la Aplicación](#uso-de-la-aplicaci%C3%B3n)
 - [Desarrollo](#desarrollo)
 - [API Documentation](#api-documentation)
 
@@ -181,6 +181,7 @@ Git para clonar el repositorio
 ### **1. Clonar el Repositorio**
 ```bash
 git clone https://github.com/maria-clavijo/proyecto-harmonia-app.git
+
 cd proyecto-harmonia-app
 ```
 
@@ -218,7 +219,7 @@ USE_GOOGLE_FIT_SIMULATION=true
 ### **3. Configuración del Frontend**
 ```bash
 # Navegar al directorio frontend
-cd ../harmonia_frontend
+cd harmonia_frontend
 
 # El frontend no requiere instalación
 ```
@@ -286,6 +287,7 @@ harmonia/
 ### **Generación de Datos de Prueba**
 ```bash
 cd harmonia_backend
+
 // Ejecutar para añadir datos históricos a la base de datos
 node generated-historical-data.js
 
